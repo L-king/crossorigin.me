@@ -1,188 +1,95 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>crossorigin.me</title>
-<link rel="icon" href="favicon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono|Roboto:300">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script type="text/javascript" src="https://blockchain.info/Resources/wallet/pay-now-button.js"></script>
-<style>
-html, body {
-	background: #EEE;
-	font-family: 'Roboto';
-	text-align: center;
-	margin: 0;
-}
-html {
-	min-width: 100%;
-}
 
-body, #header{
-	min-width: 168px;
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-#header {
-	position: fixed;
-	top:0;
-	left:0;
-	height:5vh;
-	margin:auto;
-	padding-bottom: 0.1vh;
-	z-index: 100000;
-	font-size: 4vh;
-	text-align: center;
-	width: 100vw;
-	background: #EF4836;
-	color: #EEEEEE;
-	/*box-shadow: 0px 10pxpx #000;*/
-}
+    <title>MemSQL Support Dashboard</title>
+    <meta name="description" content="My App description">
+    <link rel="icon" href="/images/favicon.ico">
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#3f51b5">
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="My App">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="My App">
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <meta name="msapplication-tap-highlight" content="no">
 
-a {
-	color: #EF4836;
-	text-decoration: underline;
-}
+    <script>
+      // Setup Polymer options
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
 
-#header a {
-	text-decoration: none;
-	color: inherit;
-	line-height: 5vh;
-	transition: color .5s;
-}
+      // Load webcomponentsjs polyfill if browser does not support native Web Components
+      (function() {
+        'use strict';
 
-#header a:hover{
-	color: white;
-}
+        var onload = function() {
+          // For native Imports, manually fire WebComponentsReady so user code
+          // can use the same code path for native and polyfill'd imports.
+          if (!window.HTMLImports) {
+            document.dispatchEvent(
+              new CustomEvent('WebComponentsReady', {bubbles: true})
+            );
+          }
+        };
 
-h3 a {
-	color:inherit;
-	cursor: pointer;
-	text-decoration: none;
-}
+        var webComponentsSupported = (
+          'registerElement' in document
+          && 'import' in document.createElement('link')
+          && 'content' in document.createElement('template')
+        );
 
-h3 a:hover {
-	text-decoration: underline;
-}
-#content {
-	padding: 5vh 0px;
-	margin: 8px auto;
-	background: white;
-	min-height: 100vh;
-	width: 60%;
-	color: #333;
-	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 2px 0 rgba(0, 0, 0, 0.2);
-	font-size: 1em;
-}
+        if (!webComponentsSupported) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.onload = onload;
+          document.head.appendChild(script);
+        } else {
+          onload();
+        }
+      })();
 
-#text {
-	margin: auto;
-	max-width: 50vw;
-}
+      // Load pre-caching Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+    </script>
 
-.blockchain-btn{
-	font-size:16px;
-	margin:0 auto;
-	width: 300px
-}
-.blockchain.stage-loading{
-	text-align:center;
-}
+    <link rel="import" href="/src/my-app.html">
 
-code {
-	display: inline-block;
-	font-family: 'Droid Sans Mono';
-	font-size: 0.7em;
-	background: #EFEFEF;
-	padding: 5px 10px;
-	box-shadow: inset 0 1px 4px 0 rgba(0, 0, 0, 0.37);
-}
-
-@media screen and (max-width: 600px) {
-	#content {
-		width: 100%;
-		margin: 0px;
-	}
-	#text {
-		max-width: 80vw;
-	}
-
-	.blockchain-btn{
-		max-width:300px;
-		width: 80vw
-	}
-    .blockchain-btn img{
-		max-width:300px;
-		width: 80vw;
-	}
-}
-</style>
-</head>
-<body>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-42726363-5', 'auto');
-  ga('send', 'pageview');
-
-</script>
-<h1 id="header"><a href="#">&#8646;</a></h1>
-<div id="content">
-<div id="text">
-<h2>Long live CORS proxies!</h2>
-<p>Welcome to crossorigin.me, the free CORS proxy for everyone!</p>
-<br />
-<script src="//blockr.io/js_external/coinwidget/coin.js"></script>
-		<script>
-			CoinWidgetCom.go({
-				wallet_address: '1GSKWayDGEMWfwMwFTTz79CCtCCYQLWtWF',
-				currency: 'bitcoin',
-				counter: 'count',
-				lbl_button: 'Donate',
-				lbl_count: 'donations',
-				lbl_amount: 'BTC',
-				lbl_address: 'Use address below to donate. Thanks!',
-				qrcode: true,
-				alignment: 'bl',
-				decimals: 3,
-				size: "big",
-				color: "light",
-				countdownFrom: "0",
-				element: "#coinwidget-bitcoin-1GSKWayDGEMWfwMwFTTz79CCtCCYQLWtWF",
-				onShow: function(){},
-				onHide: function(){}
-			});
-		</script>
-		<div id="coinwidget-bitcoin-1GSKWayDGEMWfwMwFTTz79CCtCCYQLWtWF"></div>
-		<p>You can also support crossorigin.me by becoming <a href="https://patreon.com/corsproxy/">a patron</a>, or by <a href="http://donate.crossorigin.me">donating</a> via PayPal. Thanks!</p>
-		<br />
-<h3><a name="what" href="#what">What's a "CORS proxy"?</a></h3>
-<p>A <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> proxy is a service that allows developers (probably you) to access resources from other websites, without having to own that website. </p>
-<br />
-<h3><a name="how" href="#how">How do I use it?</a></h3>
-<p>It's really easy. When you need to access a resource from a website that isn't CORS-enabled, append 'http://crossorigin.me' to the beginning of that URL. For example, if you wanted to grab the Google homepage, your code would request</p>
-<code>
-https://crossorigin.me/https://google.com
-</code>
-<p>Remember to keep the 'http://' or 'https://' after 'crossorigin.me/'.
-<br />
-<h3><a name="who" href="#who">Who set this up?</a></h3>
-<p><a href="http://technoboy10.tk">I</a> <a href="https://github.com/technoboy10">did</a>! I'm <a href="https://twitter.com/technoboyIO">technoboy10</a>, an all-around geek who likes coding. I would also appreciate it if you donated some BTC by clicking the donation button at the top of the page - domains aren't free (and neither is college)! </p>
-<br />
-<h3><a name="security" href="#security">AAAAH SO INSECURE!!!</a></h3>
-<p>...not really. By default, CORS requests do <b>not</b> send or set cookies, and neither does crossorigin.me. I take security very seriously, and I'll do my best to plug any serious security holes. Oh, and crossorigin.me is <a href="http://github.com/technoboy10/crossorigin.me">open source</a>, so please feel free to fix any security issues you find. :) </p>
-<br />
-<h3><a name="verbs" href="#verbs">This only supports GET requests!</a></h3>
-<p>Yup. Only allowing GET requests makes my code more simple, and POST requests make me nervous (uploading data to somebody else's servers seems like a security hole to me).</p>
-<p>Disagree? <a href="https://github.com/technoboy10/crossorigin.me/issues/new">File an issue</a> and let's talk.</p>
-<br />
-<h3><a name="legal" href="#legal">Disclaimer</a></h3>
-<p>
-	crossorigin.me (and by extension, technoboy10) is not responsible for any illegal activities that use this service. But please, don't do illegal stuff with crossorigin.me if you want it to keep running.
-</p>
-</div>
-</div>
-</body>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <my-app></my-app>
+    <!-- Built with love using Polymer Starter Kit -->
+  </body>
 </html>

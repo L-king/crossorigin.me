@@ -1,0 +1,11 @@
+{
+  "name": "My App",
+  "short_name": "My App",
+  "version": "0.0.0.1",
+  "manifest_version": 2,
+  "start_url": "/?homescreen=1",
+  "display": "standalone",
+  "theme_color": "#3f51b5",
+  "background_color": "#3f51b5"
+  
+}
